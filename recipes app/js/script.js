@@ -1,6 +1,10 @@
 const mealsEl = document.getElementById('meals');
 const favoriteContainer = document.getElementById('fav-meals');
 
+const mealPopup = document.getElementById('meal-popup');
+const mealInfoEl = document.getElementById('meal-info');
+const popupCloseBtn = document.getElementById('close-popup');
+
 const searchTerm = document.getElementById('search-term');
 const searchBtn = document.getElementById('search');
 
@@ -74,6 +78,10 @@ function addMeal(mealData, random = false) {
        fetchFavMeals();
     });
 
+    meal.addEventListener("click", () => {
+        showMealInfo(mealData);
+    } )
+
     mealsEl.appendChild(meal);
 }
 
@@ -112,8 +120,6 @@ async function fetchFavMeals() {
 }
 
 function addMealFav(mealData) {
-   
-
     const favMeal = document.createElement("li");
 
     favMeal.innerHTML = `
@@ -134,6 +140,28 @@ btn.addEventListener("click", () => {
     favoriteContainer.appendChild(favMeal);
 }
 
+function showMealInfo(mealData) {
+    //clean it up
+    mealInfoEl.innerHTML = '';
+
+    //update the meal info
+    const mealEl = document.createElement('div');
+
+    mealEl.innerHTML = `
+        <h1>${mealData.strMeal}</h1>
+        <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}" />
+
+        <p>
+       ${mealData.strInstructions}
+        </p>
+
+    `
+    mealInfoEl.appendChild(mealEl);
+
+    //show the popup
+    mealPopup.classList.remove('hidden');
+}
+
 searchBtn.addEventListener('click', async () => {
     // clean container
     mealsEl.innerHTML = '';
@@ -144,4 +172,8 @@ searchBtn.addEventListener('click', async () => {
    meals.forEach((meal) => {
        addMeal(meal);
    })
+})
+
+popupCloseBtn.addEventListener('click', () => {
+    mealPopup.classList.add('hidden')
 })
